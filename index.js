@@ -38,6 +38,8 @@ Model.prototype.set = function (prop, val) {
     
     this._setMiddleware(prop, val, function (err, prop, val) {
         
+        if (err) return self.emit('error', err);
+        
         // stop if the value is the same
         if (deepEqual(prev, val, true)) return;
         
@@ -59,6 +61,9 @@ Model.prototype.get = function (prop) {
     ;
     
     this._getMiddleware(prop, undefined, function (err, prop, val) {
+        
+        if (err) self.emit('error', err);
+        
         value = typeof val === 'undefined' ? self._attrs[prop] : val;
         isSynchronous = true;
     });
